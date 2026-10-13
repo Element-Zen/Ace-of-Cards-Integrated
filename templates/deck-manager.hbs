@@ -1,0 +1,55 @@
+<section class="ace-deck-manager__shell">
+  <main class="ace-deck-manager__main">
+    {{#if error}}<p class="ace-deck-manager__error">{{error}}</p>{{/if}}
+    <header class="ace-deck-manager__editor-header">
+      <div>
+        {{#if isGM}}
+          <h1>{{localize "ACEOC.Deck.CardStyleEditor"}}</h1>
+          <p>{{localize "ACEOC.Deck.CardStyleEditorHint"}}</p>
+        {{else}}
+          <h1>My Deck Style</h1>
+          <p>Choose from the GM's saved styles. Your selection applies immediately to your Ace cards.</p>
+        {{/if}}
+      </div>
+      {{#if saving}}<span><i class="fa-solid fa-spinner fa-spin"></i> {{localize "ACEOC.Deck.SavingStyle"}}</span>{{/if}}
+    </header>
+    <section class="ace-deck-manager__library" aria-label="Style Library">
+      <label class="ace-deck-manager__field">
+        <span>{{#if isGM}}Saved Styles{{else}}Choose Deck Style{{/if}}</span>
+        <select data-style-select {{#if saving}}disabled{{/if}}>
+          {{#each choices}}<option value="{{styleId}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+      </label>
+      {{#if isGM}}
+        <label class="ace-deck-manager__field ace-deck-manager__field--name">
+          <span>Style Name</span>
+          <input type="text" data-style-name value="{{styleName}}" maxlength="80" {{#unless canEdit}}disabled{{/unless}} {{#if saving}}disabled{{/if}} />
+        </label>
+        <div class="ace-deck-manager__controls">
+          <button type="button" data-action="saveStyle" {{#unless canSave}}disabled{{/unless}} title="Save changes to this style">Save</button>
+          <button type="button" data-action="saveStyleAs" {{#unless canSaveAs}}disabled{{/unless}} title="Create a named copy of this draft">Save as New</button>
+          <button type="button" data-action="activateStyle" {{#unless canActivate}}disabled{{/unless}} title="Default for users who have not chosen a personal card style">Set as Default Style</button>
+          <button type="button" data-action="deleteStyle" {{#unless canDelete}}disabled{{/unless}} title="Delete this custom style">Delete</button>
+        </div>
+      {{/if}}
+    </section>
+    <section class="ace-deck-manager__preview">
+      <div class="ace-deck-manager__card-grid">
+        <article class="ace-deck-manager__card-tile ace-deck-manager__card-tile--back">
+          <button type="button" class="ace-deck-manager__card-image-button" data-action="replaceStyleBack" {{#unless canEdit}}disabled{{/unless}} title="{{localize 'ACEOC.Deck.ReplaceCardBack'}}">
+            <span class="ace-deck-manager__card-image"><img src="{{cardBack.face}}" alt="{{cardBack.label}}" /></span>
+          </button>
+          <span class="ace-deck-manager__card-label">{{cardBack.label}}</span>
+        </article>
+        {{#each cards}}
+          <article class="ace-deck-manager__card-tile">
+            <button type="button" class="ace-deck-manager__card-image-button" data-action="replaceStyleFace" data-card-id="{{id}}" {{#unless ../canEdit}}disabled{{/unless}} title="{{localize 'ACEOC.Deck.ReplaceCardImage'}}">
+              <span class="ace-deck-manager__card-image"><img src="{{face}}" alt="{{label}}" /></span>
+            </button>
+            <span class="ace-deck-manager__card-label">{{label}}</span>
+          </article>
+        {{/each}}
+      </div>
+    </section>
+  </main>
+</section>

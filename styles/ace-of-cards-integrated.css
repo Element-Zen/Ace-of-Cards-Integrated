@@ -1,0 +1,45 @@
+/* Compact actor-specific Ace deck access directly beside ProjectFU feature names. */
+.ace-of-cards-sheet-pill {
+  appearance: none;
+  display: inline-flex !important;
+  flex: 0 0 auto !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  box-sizing: border-box;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 1.15rem;
+  min-height: 1.15rem !important;
+  margin: 0 0 0 0.3rem !important;
+  padding: 0 0.38rem !important;
+  border: 1px solid var(--color-border-light-2, rgba(0, 0, 0, 0.35));
+  border-radius: 999px;
+  background: var(--color-bg-btn-minor-inactive, rgba(0, 0, 0, 0.08));
+  color: inherit;
+  font: inherit;
+  font-size: 0.66rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.ace-of-cards-sheet-pill:hover,
+.ace-of-cards-sheet-pill:focus-visible {
+  border-color: var(--color-border-highlight, currentColor);
+  background: var(--color-bg-btn-minor-active, rgba(0, 0, 0, 0.14));
+  box-shadow: 0 0 0 1px color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.ace-of-cards-sheet-pill i,
+.ace-of-cards-sheet-pill span {
+  margin: 0 !important;
+  line-height: 1;
+}
+
+.ace-of-cards-sheet-pill i {
+  font-size: 0.66rem;
+}

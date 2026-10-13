@@ -1,0 +1,33 @@
+<section class="ace-extras-shell">
+  <main class="ace-extras-content">
+    {{#if error}}<p class="ace-extras-error">{{error}}</p>{{/if}}
+    {{#if state}}
+      <section class="ace-extras-controls">
+        <div class="ace-extras-action-row">
+          <button type="button" data-action="revealHand" {{#unless canRevealHand}}disabled{{/unless}}><i class="fa-solid fa-eye"></i> {{localize "ACEOC.Play.ShowHand"}}</button>
+          {{#if canResetEncounter}}<button type="button" data-action="resetEncounter"><i class="fa-solid fa-arrows-rotate"></i> {{resetLabel}}</button>{{/if}}
+        </div>
+      </section>
+      <section class="ace-extras-zone" data-ace-drop-zone="vanguard">
+        <header><h2>{{localize "ACEOC.Play.Vanguard"}}</h2></header>
+        <div class="ace-extras-card-grid">
+          {{#each state.vanguard}}<img src="{{face}}" alt="{{label}}" title="{{label}}" data-ace-pile-card data-card-id="{{id}}" data-zone="vanguard" draggable="{{../canEditPiles}}" />{{else}}<p>{{localize "ACEOC.Play.EmptyVanguard"}}</p>{{/each}}
+        </div>
+      </section>
+      <section class="ace-extras-zone" data-ace-drop-zone="discard">
+        <header><h2>{{localize "ACEOC.Play.DiscardPile"}}</h2></header>
+        <div class="ace-extras-card-grid">
+          {{#each state.discard}}<img src="{{face}}" alt="{{label}}" title="{{label}}" data-ace-pile-card data-card-id="{{id}}" data-zone="discard" draggable="{{../canEditPiles}}" />{{else}}<p>{{localize "ACEOC.Play.EmptyDiscard"}}</p>{{/each}}
+        </div>
+      </section>
+      <section class="ace-extras-zone" data-ace-drop-zone="hand">
+        <header><h2>{{localize "ACEOC.Play.Hand"}}</h2></header>
+        <div class="ace-extras-card-grid">
+          {{#each state.hand}}<img src="{{face}}" alt="{{label}}" title="{{label}}" data-ace-pile-card data-card-id="{{id}}" data-zone="hand" draggable="{{../canEditPiles}}" />{{else}}<p>{{localize "ACEOC.Play.EmptyHand"}}</p>{{/each}}
+        </div>
+      </section>
+    {{else}}
+      <div class="ace-extras-empty"><i class="fa-solid fa-layer-group"></i><p>{{localize "ACEOC.Play.Idle"}}</p></div>
+    {{/if}}
+  </main>
+</section>

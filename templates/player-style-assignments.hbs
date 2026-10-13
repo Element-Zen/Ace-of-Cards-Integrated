@@ -1,0 +1,17 @@
+<section class="ace-deck-manager__shell">
+  <main class="ace-deck-manager__main ace-deck-manager__assignments">
+    <header class="ace-deck-manager__editor-header"><div>
+      <h1>Player Deck Styles</h1>
+      <p>Set the initial style for each user. Any player may change their own selection later.</p>
+    </div></header>
+    {{#if error}}<p class="ace-deck-manager__error">{{error}}</p>{{/if}}
+    {{#each users}}
+      <label class="ace-deck-manager__field ace-deck-manager__assignment-row">
+        <span>{{name}}</span>
+        <select data-ace-player-style="{{id}}" {{#if isSaving}}disabled{{/if}}>
+          {{#each choices}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+      </label>
+    {{/each}}
+  </main>
+</section>

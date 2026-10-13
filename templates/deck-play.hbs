@@ -1,0 +1,111 @@
+<section class="ace-hand-shell {{#if readOnly}}is-read-only{{/if}}" style="--ace-hand-card-width:{{cardWidth}}px;--ace-hand-card-height:{{cardHeight}}px;--ace-ability-width:{{controlMetrics.abilityWidth}}px;--ace-control-row-height:{{controlMetrics.rowHeight}}px;--ace-control-gutter:{{controlMetrics.gutter}}px;--ace-control-font-size:{{controlMetrics.fontSize}}px;--ace-joker-size:{{controlMetrics.jokerSize}}px;--ace-control-rail-width:{{controlMetrics.railWidth}}px;">
+  {{#if error}}
+    <div class="ace-hand-error">{{error}}</div>
+  {{else}}
+    {{#if state}}
+      <div class="ace-hand-layout">
+        <div class="ace-hand-card-stage" data-card-stage>
+          <div class="ace-hand-strip" data-hand-strip aria-label="{{localize 'ACEOC.Play.CardRail'}}">
+            <aside class="ace-hand-control-rail" data-control-rail aria-label="{{localize 'ACEOC.Play.Controls'}}">
+              <aside class="ace-card-ability-stack" data-ability-stack aria-label="{{localize 'ACEOC.Play.CardAbilities'}}" {{#unless showAbilityStack}}hidden{{/unless}}>
+                <nav class="ace-card-abilities" aria-label="{{localize 'ACEOC.Play.AvailableSets'}}">
+                  {{#each abilities}}
+                    <span class="ace-card-ability {{#if actionable}}is-actionable{{/if}} {{#if separateJokerControl}}has-separate-joker{{/if}} {{#if jokerOnly}}is-joker-only{{/if}} {{#if activeNatural}}is-active-natural{{/if}} {{#if activeJoker}}is-active-joker{{/if}}" data-effect-id="{{id}}" title="{{primaryTitle}}" role="group" aria-label="{{label}}">
+                      <span class="ace-card-ability__visual" aria-hidden="true">
+                        <span class="ace-card-ability__gutter">{{#if displayIcon}}<span class="ace-card-ability__joker-icon">{{displayIcon}}</span>{{else}}{{#if showJokerIcon}}<span class="ace-card-ability__joker-icon">🃏</span>{{/if}}{{/if}}</span>
+                        <span class="ace-card-ability__label">{{label}}</span>
+                      </span>
+                      {{#if actionable}}
+                        {{#if separateJokerControl}}
+                          <button type="button" class="ace-card-ability__hit ace-card-ability__hit--joker" data-action="cycleAbility" data-effect-id="{{id}}" data-ability-lane="joker" title="{{jokerTitle}}" aria-label="{{jokerTitle}}" aria-pressed="{{#if activeJoker}}true{{else}}false{{/if}}"></button>
+                          <button type="button" class="ace-card-ability__hit ace-card-ability__hit--natural" data-action="cycleAbility" data-effect-id="{{id}}" data-ability-lane="natural" title="{{naturalTitle}}" aria-label="{{naturalTitle}}" aria-pressed="{{#if activeNatural}}true{{else}}false{{/if}}"></button>
+                        {{else}}
+                          <button type="button" class="ace-card-ability__hit ace-card-ability__hit--row" data-action="cycleAbility" data-effect-id="{{id}}" data-ability-lane="{{primaryLane}}" title="{{primaryTitle}}" aria-label="{{primaryTitle}}" aria-pressed="{{#if activePrimary}}true{{else}}false{{/if}}"></button>
+                        {{/if}}
+                      {{/if}}
+                    </span>
+                  {{/each}}
+                </nav>
+                {{#if showDiscardModes}}
+                  <nav class="ace-card-discard-modes" aria-label="{{localize 'ACEOC.Play.DiscardModes'}}">
+                    {{#each discardModes}}
+                      <span class="ace-card-discard-mode {{#if actionable}}is-actionable{{/if}} {{#if active}}is-active{{/if}}" data-discard-mode="{{id}}" role="group" aria-label="{{label}}">
+                        <span class="ace-card-discard-mode__visual" aria-hidden="true">
+                          <span class="ace-card-discard-mode__icon">{{icon}}</span>
+                          <span class="ace-card-discard-mode__label">{{label}}</span>
+                        </span>
+                        {{#if actionable}}
+                          <button type="button" class="ace-card-discard-mode__hit" data-action="toggleDiscardMode" data-discard-mode="{{id}}" title="{{rules}}" aria-label="{{rules}}" aria-pressed="{{#if active}}true{{else}}false{{/if}}"></button>
+                        {{/if}}
+                      </span>
+                    {{/each}}
+                  </nav>
+                {{/if}}
+                <footer class="ace-card-ability-footer" aria-label="{{localize 'ACEOC.Play.Controls'}}">
+                  <button type="button" data-action="clearSet" disabled aria-disabled="true" title="{{localize 'ACEOC.Play.ClearSetHint'}}" aria-label="{{localize 'ACEOC.Play.ClearSet'}}"><i class="fa-solid fa-eraser"></i></button>
+                  <button type="button" data-action="openPiles" title="{{localize 'ACEOC.Play.Piles'}}" aria-label="{{localize 'ACEOC.Play.Piles'}}"><i class="fa-solid fa-magnifying-glass"></i></button>
+                  <button type="button" data-action="toggleDrawerDirection" title="{{drawerDirectionLabel}}" aria-label="{{drawerDirectionLabel}}"><i class="fa-solid {{drawerDirectionIcon}}"></i></button>
+                  <button type="button" data-action="closeDrawer" title="{{localize 'Close'}}" aria-label="{{localize 'Close'}}"><i class="fa-solid fa-xmark"></i></button>
+                </footer>
+              </aside>
+            </aside>
+            <div class="ace-hand-card-window" data-card-window>
+              {{#if state.vanguardCards.length}}
+                <section class="ace-hand-zone ace-hand-zone--vanguard" data-card-window-fixed-zone data-zone-label="{{localize 'ACEOC.Play.Vanguard'}}" aria-label="{{localize 'ACEOC.Play.Vanguard'}}">
+                  {{#each state.vanguardCards}}
+                    <article class="ace-hand-card is-vanguard {{#if revealable}}is-revealable{{/if}}" data-card-window-fixed data-card-id="{{id}}" data-card-zone="vanguard" {{#if revealable}}data-action="revealVanguard" data-vanguard-card-id="{{id}}"{{/if}} title="{{label}}"><img src="{{face}}" alt="{{label}}" draggable="false" /><span class="ace-hand-zone-chip"><i class="fa-solid fa-shield-halved"></i></span></article>
+                  {{/each}}
+                </section>
+              {{/if}}
+              <section class="ace-hand-zone ace-hand-zone--deck" data-card-window-fixed-zone data-zone-label="{{localize 'ACEOC.Play.Deck'}}" aria-label="{{localize 'ACEOC.Play.Deck'}}">
+                <button type="button" class="ace-hand-card ace-hand-card--deck" data-action="draw" data-deck-slot data-card-window-fixed {{#unless canDraw}}disabled{{/unless}} title="{{localize 'ACEOC.Play.DrawFromDeck'}}" aria-label="{{localize 'ACEOC.Play.DrawFromDeck'}}">
+                  <img src="{{state.cardBack}}" alt="" draggable="false" />
+                </button>
+              </section>
+              {{#if state.handCards.length}}
+                <section class="ace-hand-zone ace-hand-zone--hand" data-zone-label="{{localize 'ACEOC.Play.Hand'}}" data-hand-card-group="hand" aria-label="{{localize 'ACEOC.Play.Hand'}}">
+                  {{#each state.handCards}}
+                    <article class="ace-hand-card {{#if selected}}is-selected{{/if}} {{#if vanguardSelected}}is-pending-vanguard{{/if}} {{#if joker}}is-joker{{/if}}" data-card-id="{{id}}" data-card-label="{{label}}" data-card-zone="hand" data-hand-group="hand" title="{{label}}">
+                      <img src="{{face}}" alt="{{label}}" draggable="false" />
+                      <button type="button" class="ace-hand-vanguard-pending {{#if vanguardSelected}}is-active{{/if}}" data-action="toggleVanguard" data-vanguard-card-id="{{id}}" data-vanguard-marker hidden aria-pressed="{{#if vanguardSelected}}true{{else}}false{{/if}}" title="{{localize 'ACEOC.Play.VanguardPending'}}"><i class="fa-solid fa-shield-halved"></i></button>
+                      {{#if showJokerControls}}
+                      <div class="ace-hand-joker-controls" data-joker-card-id="{{id}}"><span>{{assignmentLabel}}</span><div>
+                        <select data-joker-field="suit" {{#if ../readOnly}}disabled{{/if}} aria-label="{{localize 'ACEOC.Play.JokerSuit'}}">{{#each suitOptions}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+                        <select data-joker-field="value" {{#if ../readOnly}}disabled{{/if}} aria-label="{{localize 'ACEOC.Play.JokerValue'}}">{{#each valueOptions}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}</select>
+                      </div></div>
+                      {{/if}}
+                    </article>
+                  {{/each}}
+                </section>
+              {{else}}<div class="ace-hand-empty">{{localize "ACEOC.Play.EmptyHand"}}</div>{{/if}}
+            </div>
+          </div>
+          <div class="ace-hand-result-rail" data-result-rail hidden>
+            <output class="ace-hand-result-rail__message" data-result-message aria-live="polite"></output>
+            {{#if canUseAbilities}}
+              <div class="ace-hand-result-rail__message ace-hand-result-rail__activation" data-result-activation hidden>
+                <span class="ace-hand-result-rail__mp-cost" data-result-mp-cost></span>
+                <span class="ace-hand-result-rail__ability" data-result-ability-label></span>
+                <div class="ace-hand-result-choices ace-hand-result-choices--statuses" data-result-status-choices hidden aria-label="{{localize 'ACEOC.Play.ChooseTwoStatuses'}}">
+                  {{#each resolutionStatuses}}
+                    <button type="button" class="ace-hand-result-choice" data-action="toggleResolutionStatus" data-status-id="{{id}}" aria-pressed="false">{{label}}</button>
+                  {{/each}}
+                </div>
+                <div class="ace-hand-result-choices ace-hand-result-choices--damage" data-result-damage-choices hidden aria-label="{{localize 'ACEOC.Play.ChooseDamageType'}}">
+                  {{#each resolutionDamageTypes}}
+                    <button type="button" class="ace-hand-result-choice" data-action="selectResolutionDamageType" data-damage-type="{{id}}" aria-pressed="false">{{label}}</button>
+                  {{/each}}
+                </div>
+                <button type="button" class="ace-hand-result-rail__activate" data-action="resolveAbility" data-result-activate disabled aria-disabled="true"><span class="ace-hand-result-rail__activate-word">{{localize "ACEOC.Play.Activate"}}</span></button>
+              </div>
+            {{/if}}
+            <span class="ace-hand-result-rail__line ace-hand-result-rail__line--upper" data-result-line="upper" aria-hidden="true"></span>
+            <span class="ace-hand-result-rail__markers ace-hand-result-rail__markers--upper" data-result-markers="upper" aria-hidden="true"></span>
+            <span class="ace-hand-result-rail__line ace-hand-result-rail__line--lower" data-result-line="lower" aria-hidden="true"></span>
+            <span class="ace-hand-result-rail__markers ace-hand-result-rail__markers--lower" data-result-markers="lower" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+    {{else}}<div class="ace-hand-error">{{localize "ACEOC.Deck.NoActors"}}</div>{{/if}}
+  {{/if}}
+</section>
