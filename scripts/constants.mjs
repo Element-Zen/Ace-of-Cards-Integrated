@@ -1,6 +1,6 @@
 export const MODULE_ID = "ace-of-cards-integrated";
 export const MODULE_TITLE = "Ace of Cards Integrated";
-export const MODULE_VERSION = "1.0.0";
+export const MODULE_VERSION = "1.0.1";
 export const ACTOR_DECK_SCHEMA_VERSION = 11;
 export const STYLE_LIBRARY_SCHEMA_VERSION = 5;
 export const STYLE_SCHEMA_VERSION = 3;

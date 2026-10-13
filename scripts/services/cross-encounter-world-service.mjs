@@ -11,7 +11,6 @@ import {
   encounterContextFromCombat,
   startedCombats,
 } from "./encounter-context-service.mjs";
-import { deckPlayService } from "./deck-play-service.mjs";
 import { Log } from "../util/log.mjs";
 
 let initialized = false;
@@ -103,22 +102,9 @@ function activeEncounterChoices(actor, container) {
 
 async function chooseMigrationSource(actor, encounters) {
   if (!encounters.length) return "";
-  if (encounters.length === 1) {
-    const source = encounters[0];
-    const content = `<p><strong>${escape(actor.name ?? actor.uuid)}</strong> has an active encounter deck in <strong>${escape(source.sceneName)}</strong>.</p>
-      <p>Migrate that exact state into the persistent deck, or start the persistent deck fresh when it is first opened?</p>`;
-    const choice = await foundry.applications.api.DialogV2.wait({
-      window: { title: "Create Persistent Deck" },
-      content,
-      buttons: [
-        { action: "cancel", label: "Cancel", callback: () => null },
-        { action: "fresh", label: "Start Fresh", callback: () => "" },
-        { action: "migrate", label: `Migrate ${source.sceneName}`, default: true, callback: () => source.combatUuid },
-      ],
-    });
-    if (choice === null || choice === undefined) throw new PersistentMigrationCancelledError();
-    return String(choice);
-  }
+  // A single available deck has an unambiguous source: preserve its cards
+  // without interrupting a first-time user's mode switch.
+  if (encounters.length === 1) return encounters[0].combatUuid;
 
   const duplicateScenes = new Set(encounters
     .map((entry) => entry.sceneName)
@@ -161,7 +147,9 @@ async function collectMigrationSelections(target, { prompt = false } = {}) {
     if (!container) continue;
     const pending = container.status === DECK_STATUS.MIGRATION_PENDING;
     if (container.configuration?.crossEncounterDeck === true && !pending) continue;
-    const encounters = activeEncounterChoices(actor, container);
+    // Pending flags may hold valid data from an interrupted conversion, even
+    // when the original Combat has ended. Do not silently discard those cards.
+    const encounters = pending ? encounterChoices(container) : activeEncounterChoices(actor, container);
     if (!encounters.length) {
       selections.set(String(actor.uuid ?? ""), "");
       continue;
@@ -239,6 +227,7 @@ function reportMigrations(changes) {
 
 async function initializeActiveEncounterDecks() {
   if (!activeGmIsSelf()) return;
+  const { deckPlayService } = await import("./deck-play-service.mjs");
   for (const combat of startedCombats()) {
     const context = encounterContextFromCombat(combat);
     for (const actor of combatantActors(combat)) {
@@ -254,7 +243,11 @@ async function reconcileWorldMode(target, { notify = false, prompt = false } = {
   const changes = conversionPlan(target, selections);
   await applyPlan(changes, target);
   const migrated = reportMigrations(changes);
-  if (!target) await initializeActiveEncounterDecks();
+  // Startup already has the desired setting. During an onChange conversion,
+  // defer encounter initialization until Foundry has switched to encounter mode.
+  if (!target && game.settings.get(MODULE_ID, SETTINGS.CROSS_ENCOUNTER_DECK) !== true) {
+    await initializeActiveEncounterDecks();
+  }
 
   if (notify) {
     if (target && migrated.length) {
@@ -266,6 +259,18 @@ async function reconcileWorldMode(target, { notify = false, prompt = false } = {
     }
   }
   return { changed: changes.length, migrated };
+}
+
+export async function recoverPendingPersistentDeck(actor) {
+  if (!activeGmIsSelf()) throw new Error("An active GM is required to recover a pending persistent Ace deck.");
+  const current = actorDeckStore.getContainer(actor);
+  if (current?.status !== DECK_STATUS.MIGRATION_PENDING) return current;
+  const sources = encounterChoices(current);
+  const migrationCombatUuid = await chooseMigrationSource(actor, sources);
+  const next = setCrossEncounterDeckMode(current, true, { migrationCombatUuid });
+  const stored = await actorDeckStore.set(actor, next);
+  publishModeChange(actor, stored, true, "settings.crossEncounterDeck.recover");
+  return stored;
 }
 
 export function registerCrossEncounterWorldHooks() {
@@ -312,8 +317,22 @@ export function handleCrossEncounterWorldSettingChange(value) {
   void (async () => {
     applyingSetting = true;
     try {
+      // Foundry invokes onChange after persisting the new value. Restore the
+      // previous mode before waiting for GM decisions or writing Actor flags.
+      await game.settings.set(MODULE_ID, SETTINGS.CROSS_ENCOUNTER_DECK, previous);
       await reconcileWorldMode(target, { notify: true, prompt: true });
+      await game.settings.set(MODULE_ID, SETTINGS.CROSS_ENCOUNTER_DECK, target);
       currentMode = target;
+      if (!target) {
+        try {
+          await initializeActiveEncounterDecks();
+        } catch (error) {
+          // The setting and Actor storage have committed. Do not roll back
+          // just because an individual Combat opening could not initialize.
+          Log.error("Unable to initialize an active Encounter after switching modes.", error);
+          ui.notifications.error("Ace of Cards could not initialize an active Encounter. See the console.");
+        }
+      }
     } catch (error) {
       if (error instanceof PersistentMigrationCancelledError) {
         Log.warn(error.message);

@@ -3,7 +3,7 @@
   "type": "module",
   "title": "Ace of Cards Integrated",
   "description": "A ProjectFU Ace of Cards runtime with a player-personalized library of saved card styles, a contextual hand drawer, GM-editable Piles, and reversible card actions.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": {
     "minimum": "13",
     "verified": "13"
@@ -42,7 +42,7 @@
   "readme": "README.md",
   "url": "https://github.com/Element-Zen/Ace-of-Cards-Integrated",
   "manifest": "https://github.com/Element-Zen/Ace-of-Cards-Integrated/releases/latest/download/module.json",
-  "download": "https://github.com/Element-Zen/Ace-of-Cards-Integrated/releases/download/v1.0.0/ace-of-cards.zip",
+  "download": "https://github.com/Element-Zen/Ace-of-Cards-Integrated/releases/download/v1.0.1/ace-of-cards.zip",
   "bugs": "https://github.com/Element-Zen/Ace-of-Cards-Integrated/issues",
   "changelog": "https://github.com/Element-Zen/Ace-of-Cards-Integrated/blob/main/CHANGELOG.md"
 }

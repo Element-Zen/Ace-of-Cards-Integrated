@@ -1,5 +1,25 @@
 # Changelog
 
+## Version 1.0.1 — 2026-10-13
+
+### Added
+- Regression coverage for unlinked started encounters, mode switching, and recovery of pending persistent deck state.
+
+### Changed
+- A sole eligible encounter deck migrates automatically when Cross-Encounter is enabled; multiple eligible decks still require a GM choice.
+- Cross-Encounter setting changes stage the previous mode until conversion completes, then publish the new mode.
+
+### Fixed
+- Ace HUD recognizes the current started unlinked encounter without requiring manual Scene linking.
+- Previously interrupted persistent-deck migrations can recover on launch instead of remaining blocked by the retired migration interface.
+
+### Known Issues
+- None documented.
+
+### Migration Notes
+- No schema migration is required from 1.0.0. Existing Actor deck and custom art data are retained.
+- Existing pending persistent migrations with one saved encounter deck recover automatically. Multiple saved encounter decks require a GM choice; cancellation preserves the original data.
+
 ## Version 1.0.0 — 2026-10-13
 
 ### Added

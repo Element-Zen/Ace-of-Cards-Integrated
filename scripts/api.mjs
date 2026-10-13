@@ -100,12 +100,11 @@ function resolveActorDeckLaunch(actorOrUuid = null) {
     return { actorUuid: actor.uuid, combatUuid: "", sceneUuid: "" };
   }
 
-  const context = resolveEncounterContext();
-  const combat = context.combatUuid ? findCombatByUuid(context.combatUuid) : null;
-  if (!combatStarted(combat)) throw new AceDeckLaunchError("There is no started Encounter on the current Scene.", "no-started-encounter");
-
   const requested = explicitActor(actorOrUuid);
   if (actorOrUuid && !requested) throw new AceDeckLaunchError("Unable to resolve the requested Actor.", "actor-unresolved");
+  const context = resolveEncounterContext({ actorUuid: requested?.uuid });
+  const combat = context.combatUuid ? findCombatByUuid(context.combatUuid) : null;
+  if (!combatStarted(combat)) throw new AceDeckLaunchError("There is no started Encounter available for this Actor or Scene.", "no-started-encounter");
   if (requested) {
     if (!actorIsInCombat(requested, combat)) throw new AceDeckLaunchError("This Actor is not a combatant in the current Encounter.", "actor-not-in-encounter");
     if (!projectFUAdapter.hasMagicCards(requested)) throw new AceDeckLaunchError("This Actor does not possess Magic Cards.", "missing-magic-cards");

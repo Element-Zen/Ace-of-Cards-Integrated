@@ -1,4 +1,5 @@
 import { getCardDefinition } from "../cards/card-catalog.mjs";
+import { recoverPendingPersistentDeck } from "./cross-encounter-world-service.mjs";
 import { availableCardIds, beginConflictZones, drawCards, moveCard } from "../cards/deck-runtime.mjs";
 import { evaluateSet, resolveSetEffect } from "../cards/set-resolver.mjs";
 import { magicCardsMpCost } from "../cards/magic-cards-cost.mjs";
@@ -567,6 +568,12 @@ export class AceDeckPlayService {
     if (!projectFUAdapter.hasMagicCards(actor)) throw new Error("This Actor does not possess Magic Cards.");
     if (!persistentMode()) return this.getState(payload, senderUserId);
 
+    // A prior interrupted mode change must never strand an existing hand behind
+    // a retired migration screen. A sole source is restored automatically; an
+    // ambiguous set of sources is resolved with the active GM before opening.
+    if (actorDeckStore.getContainer(actor)?.status === DECK_STATUS.MIGRATION_PENDING) {
+      await recoverPendingPersistentDeck(actor);
+    }
     const outcome = await transactionService.run(actor, senderUserId, async (tx) => {
       const current = tx.source;
       if (current.status === DECK_STATUS.MIGRATION_PENDING) {

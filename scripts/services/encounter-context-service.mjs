@@ -68,13 +68,25 @@ export function resolveEncounterContext(input = {}) {
   }
 
   const sceneUuid = requestedSceneUuid || currentSceneUuid();
+  const requestedActorUuid = text(input?.actorUuid ?? input?.actor?.uuid);
+  const includesActor = (combat) => !requestedActorUuid
+    || combatantActors(combat).some((actor) => text(actor.uuid) === requestedActorUuid);
+  const sceneFor = (combat) => combatSceneUuid(combat);
   const currentCombat = globalThis.game?.combat;
-  if (combatStarted(currentCombat) && (!sceneUuid || combatSceneUuid(currentCombat) === sceneUuid)) {
+  if (combatStarted(currentCombat) && includesActor(currentCombat)
+      && (!sceneUuid || !sceneFor(currentCombat) || sceneFor(currentCombat) === sceneUuid)) {
     return encounterContextFromCombat(currentCombat);
   }
 
-  const combat = startedCombats().find((candidate) => !sceneUuid || combatSceneUuid(candidate) === sceneUuid);
-  if (combat) return encounterContextFromCombat(combat);
+  const started = startedCombats().filter(includesActor);
+  const sceneCombat = started.find((candidate) => sceneFor(candidate) && sceneFor(candidate) === sceneUuid);
+  if (sceneCombat) return encounterContextFromCombat(sceneCombat);
+
+  // Unlinked encounters are intentionally scene-independent. Never assign a Scene
+  // or choose arbitrarily between several unlinked encounters.
+  const unlinked = started.filter((candidate) => !sceneFor(candidate));
+  if (unlinked.length === 1) return encounterContextFromCombat(unlinked[0]);
+  if (!sceneUuid && started.length === 1) return encounterContextFromCombat(started[0]);
   return { combatUuid: "", sceneUuid, conflictId: "" };
 }
 
