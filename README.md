@@ -1,3 +1,5 @@
+![Ace of Cards Integrated](Screenshots/Ace%20of%20Cards%20Integrated.png)
+
 [![Join Discord](https://img.shields.io/badge/Join%20Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/zWSm83jDBw)
 
 # Ace of Cards Integrated
