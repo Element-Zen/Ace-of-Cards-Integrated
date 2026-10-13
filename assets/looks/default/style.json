@@ -1,0 +1,43 @@
+{
+  "id": "placeholder",
+  "name": "Flair by Zenfyre",
+  "elementBadges": {
+    "earth": "elements/earth.svg",
+    "air": "elements/air.svg",
+    "fire": "elements/fire.svg",
+    "ice": "elements/ice.svg"
+  },
+  "faces": {
+    "earth-1": "cards/earth-1.webp",
+    "earth-2": "cards/earth-2.webp",
+    "earth-3": "cards/earth-3.webp",
+    "earth-4": "cards/earth-4.webp",
+    "earth-5": "cards/earth-5.webp",
+    "earth-6": "cards/earth-6.webp",
+    "earth-7": "cards/earth-7.webp",
+    "air-1": "cards/air-1.webp",
+    "air-2": "cards/air-2.webp",
+    "air-3": "cards/air-3.webp",
+    "air-4": "cards/air-4.webp",
+    "air-5": "cards/air-5.webp",
+    "air-6": "cards/air-6.webp",
+    "air-7": "cards/air-7.webp",
+    "fire-1": "cards/fire-1.webp",
+    "fire-2": "cards/fire-2.webp",
+    "fire-3": "cards/fire-3.webp",
+    "fire-4": "cards/fire-4.webp",
+    "fire-5": "cards/fire-5.webp",
+    "fire-6": "cards/fire-6.webp",
+    "fire-7": "cards/fire-7.webp",
+    "ice-1": "cards/ice-1.webp",
+    "ice-2": "cards/ice-2.webp",
+    "ice-3": "cards/ice-3.webp",
+    "ice-4": "cards/ice-4.webp",
+    "ice-5": "cards/ice-5.webp",
+    "ice-6": "cards/ice-6.webp",
+    "ice-7": "cards/ice-7.webp",
+    "joker-a": "cards/joker-a.webp",
+    "joker-b": "cards/joker-b.webp"
+  },
+  "cardBack": "backs/default.webp"
+}
