@@ -1,3 +1,5 @@
+[![Join Discord](https://img.shields.io/badge/Join%20Discord-%235865F2.svg?&logo=discord&logoColor=white)](https://discord.gg/zWSm83jDBw)
+
 # Ace of Cards Integrated
 
 **Ace of Cards Integrated** is a ProjectFU module for running the Fabula Ultima Ace of Cards class in Foundry Virtual Tabletop. It provides encounter-scoped or persistent Actor hands, card actions, Vanguard handling, reversible results, GM correction tools, and named personal Deck Styles with per-user artwork, saved presets, and GM assignment controls.
