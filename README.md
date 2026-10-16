@@ -68,28 +68,6 @@ The module does not forcibly spend MP, choose targets, apply optional effects, o
 
 The Actor deck schema is version 11. The style library schema is version 5, and individual styles continue at schema version 3.
 
-## Installation
-
-The installed module path must be:
-
-```text
-{UserData}/Data/modules/ace-of-cards-integrated/module.json
-```
-
-Release ZIPs contain one top-level folder named `ace-of-cards-integrated`. Remove older `ace-of-cards-class-fu` installations before installing this package.
-
-The previous alpha package ID and the current package ID are separate Foundry namespaces. Existing settings and Actor flags stored under `ace-of-cards-class-fu` are not automatically migrated.
-
-## Distribution
-
-Official source repository: https://github.com/Element-Zen/Ace-of-Cards-Integrated
-
-Foundry manifest (latest published release): https://github.com/Element-Zen/Ace-of-Cards-Integrated/releases/latest/download/module.json
-
-Version 1.0.0 installation ZIP: https://github.com/Element-Zen/Ace-of-Cards-Integrated/releases/download/v1.0.0/ace-of-cards.zip
-
-The manifest also includes the repository issue-tracker and hosted changelog links. Upload `module.json` and `ace-of-cards.zip` as two separate assets to the GitHub release tagged `v1.0.0`. These links are not live until the GitHub release is published.
-
 ## Use
 
 Use the native **Ace of Cards** control exposed through ProjectFU, the Actor-sheet **Card Deck** control, or the public API:
