@@ -6,14 +6,6 @@
 
 **Ace of Cards Integrated** is a ProjectFU module for running the Fabula Ultima Ace of Cards class in Foundry Virtual Tabletop. It provides encounter-scoped or persistent Actor hands, card actions, Vanguard handling, reversible results, GM correction tools, and named personal Deck Styles with per-user artwork, saved presets, and GM assignment controls.
 
-## Requirements
-
-- Foundry Virtual Tabletop 13
-- ProjectFU
-- The official Fabula Ultima rules, including the Ace of Cards class material
-
-Foundry V13 is the only supported and verified manifest generation (`minimum: 13`, `verified: 13`). V14 compatibility is not claimed. This manifest declaration is not a separate Foundry certification or a substitute for testing the module in Foundry.
-
 ## Features
 
 ### Deck play modes
