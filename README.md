@@ -123,13 +123,6 @@ await ace.styles.activate(saved.styleId); // Sets the fallback for users without
 - Owners and GMs may perform normal card actions for that Actor.
 - GM authority controls shared mutations, Piles correction, encounter lifecycle synchronization, and card-style authoring.
 
-## Current validation status
-
-The development source for version 1.0.0 passes the automated Node regression suite and JavaScript syntax checks. Tests and developer tooling are intentionally excluded from the distribution ZIP but retained in the separate development source archive.
-
-The module declares Foundry V13 compatibility only. Live Foundry V13 GM/player end-to-end verification has not been performed as part of this packaging pass, including ProjectFU controls, drawing/discard synchronization, Piles, and per-player Style selection. This verification is still needed before publicly advertising that the release was tested in a live V13 environment.
-
-
 ## License
 
 See [LICENSE.md](LICENSE.md) for package usage terms and the required Fabula Ultima third-party notice.
